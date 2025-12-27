@@ -1,7 +1,7 @@
 const std = @import("std");
 const warn = std.log.warn;
 const panic = std.debug.panic;
-const c = @import("c.zig");
+const c = @import("c");
 
 const width: i32 = 1024;
 const height: i32 = 768;
