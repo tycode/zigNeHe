@@ -7,23 +7,23 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "Lesson04",
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
 
     switch (currentTarget.os.tag) {
         .macos => {
-            exe.addFrameworkPath(.{ .path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks" });
+            exe.addFrameworkPath(.{ .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks" });
             exe.linkFramework("OpenGL");
         },
         .freebsd => {
-            exe.addIncludePath(.{ .path = "/usr/local/include/GL" });
+            exe.addIncludePath(.{ .cwd_relative = "/usr/local/include/GL" });
             exe.linkSystemLibrary("gl");
             exe.linkSystemLibrary("glu");
         },
         .linux => {
-            exe.addLibraryPath(.{ .path = "/usr/lib/x86_64-linux-gnu" });
+            exe.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
             exe.linkSystemLibrary("c");
             exe.linkSystemLibrary("GL");
         },
@@ -31,7 +31,7 @@ pub fn build(b: *std.Build) void {
             @panic("don't know how to build on your system");
         },
     }
-    exe.addIncludePath(.{ .path = "/usr/local/include" });
+    exe.addIncludePath(.{ .cwd_relative = "/usr/local/include" });
     exe.linkSystemLibrary("glfw");
 
     b.installArtifact(exe);
